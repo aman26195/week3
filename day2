@@ -1,0 +1,104 @@
+package com.company;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Book {
+    private String title;
+    private String author;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
+    }
+}
+
+class Library {
+    private List<Book> availableBooks;
+    private List<Book> issuedBooks;
+
+    public Library() {
+        this.availableBooks = new ArrayList<>();
+        this.issuedBooks = new ArrayList<>();
+    }
+
+    public void addBook(String title, String author) {
+        Book newBook = new Book(title, author);
+        availableBooks.add(newBook);
+        System.out.println("Book added: " + newBook);
+    }
+
+    public void issueBook(String title) {
+        Book bookToIssue = findBook(title, availableBooks);
+        if (bookToIssue != null) {
+            availableBooks.remove(bookToIssue);
+            issuedBooks.add(bookToIssue);
+            System.out.println("Book issued: " + bookToIssue);
+        } else {
+            System.out.println("Book not available for issuing.");
+        }
+    }
+
+    public void returnBook(String title) {
+        Book returnedBook = findBook(title, issuedBooks);
+        if (returnedBook != null) {
+            issuedBooks.remove(returnedBook);
+            availableBooks.add(returnedBook);
+            System.out.println("Book returned: " + returnedBook);
+        } else {
+            System.out.println("Book not issued, cannot be returned.");
+        }
+    }
+
+    public void showAvailableBooks() {
+        System.out.println("Available Books:");
+        for (Book book : availableBooks) {
+            System.out.println(book);
+        }
+    }
+
+    private Book findBook(String title, List<Book> books) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+}
+
+public class cwh_51_exercise4 {
+    public static void main(String[] args) {
+        Library library = new Library();
+
+        library.addBook("Book1", "Author1");
+        library.addBook("Book2", "Author2");
+        library.addBook("Book3", "Author3");
+
+        library.showAvailableBooks();
+
+        library.issueBook("Book2");
+
+        library.showAvailableBooks();
+
+        library.returnBook("Book2");
+
+        library.showAvailableBooks();
+    }
+}
